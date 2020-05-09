@@ -1,5 +1,6 @@
 package com.example.a13678.coolweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.a13678.coolweather.gson.Forecast;
 import com.example.a13678.coolweather.gson.Weather;
+import com.example.a13678.coolweather.service.AutoUpdateService;
 import com.example.a13678.coolweather.util.HttpUtil;
 import com.example.a13678.coolweather.util.Utility;
 
@@ -72,6 +74,7 @@ public class WeatherActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
         setContentView(R.layout.activity_weather);
+
         //初始化各控件
         weatherLayout =  findViewById(R.id.weather_layout);
         titleCity =  findViewById(R.id.title_city);
@@ -142,6 +145,7 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.putString("weather", responseText);
                             editor.apply();
                             showWeatherInfo(weather);
+
                         } else {
                             Toast.makeText(WeatherActivity.this, "获取天气信息失败",
                                     Toast.LENGTH_SHORT).show();
@@ -202,6 +206,8 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
     /**
      * 加载必应每日一图
